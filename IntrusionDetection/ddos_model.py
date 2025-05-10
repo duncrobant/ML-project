@@ -4,9 +4,12 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
+from sklearn.svm import LinearSVC
+from sklearn.preprocessing import QuantileTransformer
 
-ddos_model = RandomForestClassifier(n_estimators=10, random_state=42, max_samples=0.5, n_jobs=-1, bootstrap= True, verbose= True )
-accuracy_list = []
+
+ddos_model =  LinearSVC(C=1.0, max_iter=10000, verbose=True)
+scaler = QuantileTransformer( random_state=42)
 
 def run_ddos_detect(display_log= True, display_graphs= True ):
     print("Starting: File Read")
@@ -31,12 +34,12 @@ def train(train_data):
 
     X = np.column_stack([
         flow_duration,
-        # fwd_pkts,
-        # bwd_pkts,
+        fwd_pkts,
+        bwd_pkts,
         pkts,
-        # byts,
-        # fwd_len_mean,
-        # syn_cnt,
+        byts,
+        fwd_len_mean,
+        syn_cnt,
         idle_mean
     ])
     print("Finished: snagging features")
@@ -44,8 +47,8 @@ def train(train_data):
     labels = train_data["Label"].to_numpy()
 
     # sanitize
-    X = np.nan_to_num(X, nan=0.0, posinf=200.0, neginf=0.0)
-
+    X = np.nan_to_num(X, nan=0.0, posinf=20000000.0, neginf=0.0)
+    X = scaler.fit_transform(X)
     #do the randomforest
     print("Started: Fitting Model")
     ddos_model.fit(X, labels)
@@ -64,30 +67,25 @@ def test(test_data):
     idle_mean = test_data["Idle Mean"]
     X = np.column_stack([
         flow_duration,
-        # fwd_pkts,
-        # bwd_pkts,
-         pkts,
-        # byts,
-        # fwd_len_mean,
-        # syn_cnt,
+        fwd_pkts,
+        bwd_pkts,
+        pkts,
+        byts,
+        fwd_len_mean,
+        syn_cnt,
         idle_mean
     ])
     # snag labels
     labels = test_data["Label"].to_numpy()
 
     # sanitize
-    X = np.nan_to_num(X, nan=0.0, posinf=200.0, neginf=0.0)
-
-    # do the randomforest
+    X = np.nan_to_num(X, nan=0.0, posinf=20000000.0, neginf=0.0)
+    X = scaler.transform(X)
+    # do the model
     pred = ddos_model.predict(X)
     print("Classification Report (Testing Data):")
     print(classification_report(labels, pred))
-    #pull this out too for alert system
-    # source_ips = test_data["Src IP"].to_numpy()
-    # accuracy =
-    # for i, prediction in enumerate(pred):
-        #if prediction != "BENIGN":
-            # print(f"Possible DDoS from Source IP: {source_ips[i]} Confidence: {prediction[1]}")
+
 
     print("Finished: Testing")
 run_ddos_detect()

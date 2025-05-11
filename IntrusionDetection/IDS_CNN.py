@@ -1,4 +1,3 @@
-# Dataset used: https://www.kaggle.com/datasets/ericanacletoribeiro/cicids2017-cleaned-and-preprocessed
 import numpy as np 
 import pandas as pd 
 import matplotlib.pyplot as plt
@@ -10,7 +9,6 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import confusion_matrix, classification_report, precision_score, recall_score, f1_score
-
 
 
 

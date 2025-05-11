@@ -1,4 +1,4 @@
-# Preproccesing done based off this github: 
+# Preproccesing done based off this github: https://github.com/anacletu/ml-intrusion-detection-cicids2017
 
 
 import numpy as np

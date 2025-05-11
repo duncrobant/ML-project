@@ -14,7 +14,7 @@ Instructiopns for CNN set:
     Download CICIDS2017 set here:
     https://www.unb.ca/cic/datasets/ids-2017.html
 
-   Place dataset in datasets/CICIDS2017 dir
+   Place dataset in datasets/CICIDS2017PRE dir
 
    run CIC2017_prepro.py
 

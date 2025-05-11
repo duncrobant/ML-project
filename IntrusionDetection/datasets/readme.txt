@@ -9,3 +9,12 @@ Instructiopns for DDoS set:
    run prepro.py
 
    you are now ready to run it
+
+Instructiopns for CNN set:
+    Download CICIDS2017 set here:
+    https://www.unb.ca/cic/datasets/ids-2017.html
+
+   Place dataset in datasets/CICIDS2017 dir
+
+   run CIC2017_prepro.py
+
